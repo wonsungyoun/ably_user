@@ -33,7 +33,7 @@
 ### 1.4.실행방법
 -------
 ```
-   $ git https://github.com/wonsungyoun/user.git
+   $ git clone https://github.com/wonsungyoun/user.git
    $ cd user
    $ ./gradlew clean build
    $ java -jar build/libs/user-0.0.1-SNAPSHOT.jar
