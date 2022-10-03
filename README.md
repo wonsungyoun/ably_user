@@ -37,5 +37,127 @@
 =============
 2.1.회원가입
 ----------
-2.1.1.INPUT
+### 2.1.1.INPUT
+```
+POST http://localhost:8080/api/customer/register
+Content-Type: application/json
 
+{
+  "email": 이메일,
+  "password": 비밀번호,
+  "name": 이름,
+  "nickName": 별명,
+  "phoneNumber" : 전화번호
+}
+```
+- 이메일은 아이디@도메인 형식으로 작성하지 않을 시 예외가 던져지게 된다.
+- 전화번호는 010-XXXX-XXXX 양식으로 작성하지 않으면 예외가 던져지게 된다.
+- 모든값들은 필수적으로 적어야 하며 작성하지 않을 시 예외가 던져지게 된다.
+
+### 2.1.1.OUTPUT
+#### 2.1.1.1. SUCCESS SAMPLE
+```
+{
+  "email": "sywon@subutai.com",
+  "name": "원성연,",
+  "nickName": "수부타이",
+  "phoneNumber": "010-1111-2222",
+  "regDate": "2022-10-03T07:17:05.571+00:00",
+  "lastLoginDate": null,
+  "loginYn": "N"
+}
+```
+- 성공적으로 가입되었을시 관련 정보들이 반환된다.
+
+#### 2.1.1.2. FAIL SAMPLE
+
+```
+{
+  "code": 400,
+  "message": 원인 메시지,
+  "data": null
+}
+```
+- 실패 시 원인 메시지가 표시 된다. 
+
+2.2.로그인
+----------
+### 2.2.1.INPUT
+```
+POST http://localhost:8080/api/customer/login
+Content-Type: application/json
+
+{
+  "email":이메일,
+  "password": 비밀번호
+}
+```
+- 이메일은 아이디@도메인 형식으로 작성하지 않을 시 fail메시지가 반환 된다.
+- 모든값들은 필수적으로 적어야 하며 작성하지 않을 시 fail메시지가 반환 된다.
+
+### 2.2.1.OUTPUT
+#### 2.2.1.1. SUCCESS SAMPLE
+```
+{
+  "grantType": "Bearer",
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXdvbkBzdWJ1dGFpLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2NjQ3ODU1OTd9.6Yx0k1e1fLVAN7B5WVrwYdfsa2HoCFojnfl8Ykcm3IA",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjU5OTE1OTd9.zhoJ42dpThDUXlOiHzOk2jenY9bLp1GGlEDWDNduONg"
+}
+```
+- 성공적으로 로그인 되었을시 accessToekn, refreshToken이 던져지게 된다.
+- 토큰은 jwt토큰으로 현재 각각 1시간, 2주로 지정 되어있다.
+
+##### 2.2.1.2. FAIL SAMPLE
+
+```
+{
+  "code": 400,
+  "message": 원인 메시지,
+  "data": null
+}
+```
+- 실패 시 원인 메시지가 표시 된다. 
+
+2.3.내 정보 확인
+----------
+### 2.3.1.INPUT
+```
+POST http://localhost:8080/api/customer/login
+Content-Type: application/json
+
+{
+  "email":이메일,
+  "password": 비밀번호
+}
+```
+- 이메일은 아이디@도메인 형식으로 작성하지 않을 시 fail메시지가 반환 된다.
+- 모든값들은 필수적으로 적어야 하며 작성하지 않을 시 fail메시지가 반환 된다.
+
+### 2.3.1.OUTPUT
+#### 2.3.1.1. SUCCESS SAMPLE
+```
+{
+  "grantType": "Bearer",
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeXdvbkBzdWJ1dGFpLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE2NjQ3ODU1OTd9.6Yx0k1e1fLVAN7B5WVrwYdfsa2HoCFojnfl8Ykcm3IA",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjU5OTE1OTd9.zhoJ42dpThDUXlOiHzOk2jenY9bLp1GGlEDWDNduONg"
+}
+```
+- 성공적으로 로그인 되었을시 accessToekn, refreshToken이 던져지게 된다.
+- 토큰은 jwt토큰으로 현재 각각 1시간, 2주로 지정 되어있다.
+
+##### 2.3.1.2. FAIL SAMPLE
+
+```
+{
+  "code": 400,
+  "message": 원인 메시지,
+  "data": null
+}
+
+##### 2.3.1.3.  403 SAMPLE
+
+```
+<Response body is empty>
+
+```
+- 토큰이 정확하지 않을 시 해당 ap
