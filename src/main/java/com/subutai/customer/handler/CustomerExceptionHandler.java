@@ -113,6 +113,23 @@ public class CustomerExceptionHandler {
         return this.createResponseEntity(400, ResponseConstants.SMS_SEND_HISTORY_NOT_EXIST);
     }
 
+    /**
+     * 인증번호 미일치
+     * @param ce
+     * @return
+     */
+    @ExceptionHandler(CertificationNumberNotMatchException.class)
+    public ResponseEntity<ResponseData> certificationNumberNotMatchException(CertificationNumberNotMatchException ce) {
+        log.error(ce.getMessage());
+
+        return this.createResponseEntity(400, ResponseConstants.CERTIFICATION_NUMBER_NOT_MATCH);
+    }
+
+    /**
+     * 휴대폰 인증시간 만료
+     * @param ce
+     * @return
+     */
     @ExceptionHandler(CertificationExpireException.class)
     public ResponseEntity<ResponseData> certificationExpireException(CertificationExpireException ce) {
         log.error(ce.getMessage());

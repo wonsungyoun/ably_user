@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 public class SmsSendHistoryController {
 
@@ -35,12 +37,12 @@ public class SmsSendHistoryController {
      * @return
      */
     @PostMapping("/api/sms/create-certification-number")
-    public ResponseEntity<CertificationNumberData> createCertificationNumber(@RequestBody AccountKey accountKey) {
+    public ResponseEntity<CertificationNumberData> createCertificationNumber(@Valid @RequestBody AccountKey accountKey) {
 
         CustomerData customerData = customerService.findCustomerDataByEmail(accountKey.getEmail());
 
         if(!customerData.getPhoneNumber().equals(accountKey.getPhoneNumber())) {
-            throw new PasswordNotMatchException("비밀번호가 일치하지 않습ㄴ이다.");
+            throw new PasswordNotMatchException("폰 번호가 일치하지 않습니다.");
         }
 
         return responseDataFactory.getSuccessResponseEntity(smsSendHistoryService.createNumber(accountKey));

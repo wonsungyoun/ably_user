@@ -7,8 +7,10 @@ import com.subutai.customer.dto.AccountKey;
 import com.subutai.customer.dto.RegenerationKey;
 import com.subutai.customer.dto.CertificationNumberData;
 import com.subutai.customer.dto.CustomerData;
+import com.subutai.customer.exception.CertificationNumberNotMatchException;
 import com.subutai.customer.exception.PasswordNotMatchException;
 import com.subutai.customer.exception.SmsSendHistoryNotExistException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -18,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SmsSendHistoryService {
 
     @Autowired
@@ -47,10 +50,14 @@ public class SmsSendHistoryService {
      */
     public boolean certification(RegenerationKey key) {
 
-        List<SmsSendHistory> smsSendHistories = smsSendHistoryRepository.findAllByEmailAndPhoneNumberOrderByIdDesc(key.getEmail(), key.getPhoneNumber());
+        List<SmsSendHistory> smsSendHistories = smsSendHistoryRepository.findAllByEmailAndPhoneNumber(key.getEmail(), key.getPhoneNumber());
 
         if(CollectionUtils.isEmpty(smsSendHistories)) {
             throw new SmsSendHistoryNotExistException("전송 이력이 없습니다.");
+        }
+
+        if(smsSendHistories.get(0).getCertificationNumber() != key.getCertificationNumber()) {
+            throw new CertificationNumberNotMatchException("인증번호가 맞지 않습니다.");
         }
 
         SmsSendHistory smsSendHistory = smsSendHistories.get(0);
@@ -59,11 +66,11 @@ public class SmsSendHistoryService {
         cal.setTime(smsSendHistory.getSendDate());
         cal.add(Calendar.MINUTE, 5);
 
-        if(cal.getTime().before(new Date())) {
-            return true;
-        }else {
-            return false;
-        }
+        Date expireDate = cal.getTime();
+        Date nowDate = new Date();
+
+        // 만료 여부 체크.
+        return nowDate.before(expireDate);
     }
 
 }

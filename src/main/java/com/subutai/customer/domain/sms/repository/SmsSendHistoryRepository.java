@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface SmsSendHistoryRepository extends JpaRepository<SmsSendHistory, Long> {
 
-    List<SmsSendHistory> findAllByEmailAndPhoneNumberOrderByIdDesc(String email, String phoneNumber);
+    List<SmsSendHistory> findAllByEmailAndPhoneNumber(String email, String phoneNumber);
     SmsSendHistory findAllById(Long id);
 
 }

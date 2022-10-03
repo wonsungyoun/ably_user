@@ -16,5 +16,7 @@ public class ResponseConstants {
 
     public static final String SMS_SEND_HISTORY_NOT_EXIST = "전송 이력이 없습니다";
 
+    public static final String CERTIFICATION_NUMBER_NOT_MATCH = "일치하지 않는 인증 번호입니다.";
+
     public static final String CERTIFICATION_EXPIRE = "인증이 만료되었습니다.";
 }
