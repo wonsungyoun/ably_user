@@ -1,8 +1,10 @@
 package com.subutai.customer.config.security;
 
 import com.subutai.customer.config.security.jwt.JwtAuthenticationFilter;
+import com.subutai.customer.config.security.jwt.JwtExceptionFilter;
 import com.subutai.customer.config.security.jwt.JwtTokenProvider;
 import com.subutai.customer.domain.customer.service.CustomerService;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -56,6 +58,7 @@ public class SecurityConfig {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+
     /**
      * 인증 유효성 판단 객체 생성
      * @param http
@@ -84,7 +87,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception, JwtException {
         this.setHeaders(http); // 헤더 설정.
         //this.setAuthorizeHttpRequests(http);
 
@@ -97,7 +100,8 @@ public class SecurityConfig {
                 .antMatchers("/api/customer/register","/api/customer/login", "/api/customer/password-regeneration","/h2/**","/h2-console/**", "/api/sms/create-certification-number").permitAll() // 해당 url만 전체 사용 가능
                 .anyRequest().authenticated() // 다른 url은 로그인 필요
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt 토큰 체크를 최우선으로 한다.
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class); // jwt 토큰 체크를 최우선으로 한다.
         return http.build();
     }
 

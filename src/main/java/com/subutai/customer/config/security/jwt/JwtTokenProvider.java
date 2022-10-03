@@ -80,25 +80,13 @@ public class JwtTokenProvider {
      * @param token
      * @return
      */
-    public boolean validateToken(String token) {
-        try{
-            Jwts.parserBuilder()
-                        .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+    public boolean validateToken(String token){
+        Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
 
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e); // 올바르게 구성되지 않음.
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e); // 만료.
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e); // jwt 형식에 맞지않음.
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e); // 문자열 타입이 아님.
-        }
-
-        return false;
+        return true;
     }
 
     /**

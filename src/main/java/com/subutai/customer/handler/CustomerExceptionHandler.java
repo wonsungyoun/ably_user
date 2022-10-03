@@ -3,6 +3,10 @@ package com.subutai.customer.handler;
 import com.subutai.customer.constants.ResponseConstants;
 import com.subutai.customer.exception.*;
 import com.subutai.customer.result.ResponseData;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +78,56 @@ public class CustomerExceptionHandler {
     public ResponseEntity<ResponseData> tokenNotAccessException(TokenNotAccessException te) {
         log.error(te.getMessage());
 
-        return this.createResponseEntity(400, ResponseConstants.TOKEN_NOT_ACCESS);
+        return this.createResponseEntity(403, ResponseConstants.TOKEN_NOT_ACCESS);
+    }
+
+    /**
+     * 올바르게 구성되지 못한 토큰.
+     * @param ee
+     * @return
+     */
+    @ExceptionHandler({SecurityException.class, MalformedJwtException.class})
+    public ResponseEntity<ResponseData> malformedJwtException(ExpiredJwtException ee) {
+        log.error(ee.getMessage());
+
+        return this.createResponseEntity(403, ResponseConstants.TOKEN_NOT_ACCESS);
+    }
+
+    /**
+     * jwt 형식에 맞지 않음.
+     * @param ee
+     * @return
+     */
+    @ExceptionHandler(UnsupportedJwtException.class)
+    public ResponseEntity<ResponseData> unsupportedJwtException(UnsupportedJwtException ee) {
+        log.error(ee.getMessage());
+
+        return this.createResponseEntity(403, ResponseConstants.TOKEN_NOT_ACCESS);
+    }
+
+    /**
+     * 타입에 맞지 않음.
+     * @param ee
+     * @return
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ResponseData> illegalArgumentException(IllegalArgumentException ee) {
+        log.error(ee.getMessage());
+
+        return this.createResponseEntity(403, ResponseConstants.TOKEN_NOT_ACCESS);
+    }
+
+
+    /**
+     * 만료된 토큰.
+     * @param ee
+     * @return
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ResponseData> expiredJwtException(ExpiredJwtException ee) {
+        log.error(ee.getMessage());
+
+        return this.createResponseEntity(403, ResponseConstants.TOKEN_NOT_ACCESS);
     }
 
     /**

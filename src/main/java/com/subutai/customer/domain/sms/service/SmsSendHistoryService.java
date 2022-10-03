@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class SmsSendHistoryService {
      */
     public boolean certification(RegenerationKey key) {
 
-        List<SmsSendHistory> smsSendHistories = smsSendHistoryRepository.findAllByEmailAndPhoneNumber(key.getEmail(), key.getPhoneNumber());
+        List<SmsSendHistory> smsSendHistories = smsSendHistoryRepository.findAllByEmailAndPhoneNumberOrderByIdDesc(key.getEmail(), key.getPhoneNumber());
 
         if(CollectionUtils.isEmpty(smsSendHistories)) {
             throw new SmsSendHistoryNotExistException("전송 이력이 없습니다.");
@@ -69,8 +70,16 @@ public class SmsSendHistoryService {
         Date expireDate = cal.getTime();
         Date nowDate = new Date();
 
-        // 만료 여부 체크.
-        return nowDate.before(expireDate);
+        // 만료 및 이미 확인한 번호인지 체크.
+        if(nowDate.before(expireDate) && "N".equals(smsSendHistory.getIsConfirm())){
+            // 인증 확인(비밀번호 중복 재생성 방지)
+            smsSendHistory.confirm();
+            smsSendHistoryRepository.save(smsSendHistory);
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
 }

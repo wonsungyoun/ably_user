@@ -20,5 +20,6 @@ create table SMS_SEND_HISTORY(
     phone_number varchar(10) not null ,
     certification_number int(5) not null,
     send_date_time timestamp,
+    is_confirm char(1),
     primary key (NO)
 );

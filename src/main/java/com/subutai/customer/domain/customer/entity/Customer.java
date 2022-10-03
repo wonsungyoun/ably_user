@@ -21,25 +21,35 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 public class Customer {
+
+    // 이메일
     @Id
     private String email;
 
+    // 비밀번호
     @JsonIgnore
     private String password;
 
+    // 이름
     private String name;
 
+    // 닉네임
     @Column(name = "nick_name")
     private String nickName;
 
+    // 폰번호
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    // 등록날짜
     @Column(name="reg_date_time")
     private Date regDateTime;
 
+    // 마지막 로그인 시각
     @Column(name = "last_login_date_time")
     private Date lastLoginDate;
+
+    // 현재 로그인 여부 (이 프로젝트에서는 비중없는 컬럼이지만, 실제 이커머스페이지에선 필요)
     @Column(name = "login_yn")
     private String loginYn;
 
