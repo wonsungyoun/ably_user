@@ -23,7 +23,7 @@
 - 서비스는 도메인 별로 나누었으며 도메인은 서비스당 하나의 repository만 갖고있음.
 - 도메인의 핵심인 entity는 db본연의 값을 지니고 있기에 setter 메소드를 갖고 있지 않고, 사용 시에는 dto를 생성함.
 - 계층간 교환은 dto로 교환함.
-- exception hanler를 두어 return null;을 지양하고 예외를 상세히 구성함.
+- exception handler를 두어 return null;을 지양하고 예외를 상세히 구성함.
 - 로그인은 rest api가 지향하는 방향을 따르기위해 세션방식이 아닌 jwt토큰방식을 사용함.
 
 ### 1.3.도메인 구성
