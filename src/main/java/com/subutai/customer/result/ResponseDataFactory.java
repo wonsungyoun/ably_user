@@ -22,8 +22,7 @@ public class ResponseDataFactory {
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("/api/customer/register").toUriString());
+                        .fromCurrentContextPath().toUriString());
 
         return uri;
     }
